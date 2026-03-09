@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>考古圖 Kaogu Tu — The World's First Archaeological Catalog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a1612;
+      --parchment: #f5f0e8;
+      --parchment-dark: #e8dfd2;
+      --gold: #b8860b;
+      --gold-light: #d4a843;
+      --rust: #8b4513;
+      --sage: #6b7c5e;
+      --stone: #7a746a;
+      --cream: #faf7f2;
+      --warm-white: #fefcf8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--ink);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ===== NAVIGATION ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(250, 247, 242, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(184, 134, 11, 0.15);
+      transition: transform 0.3s ease;
+    }
+
+    nav .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.8rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav .nav-logo {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+
+    nav .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    nav .nav-links a {
+      text-decoration: none;
+      color: var(--stone);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    nav .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(184, 134, 11, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 30%, rgba(139, 69, 19, 0.04) 0%, transparent 50%),
+        var(--warm-white);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 80px,
+          rgba(184, 134, 11, 0.03) 80px,
+          rgba(184, 134, 11, 0.03) 81px
+        );
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.3s forwards;
+    }
+
+    .hero-title-cn {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.5s forwards;
+    }
+
+    .hero-title-en {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.3rem, 3vw, 2.2rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--stone);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.7s forwards;
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      font-weight: 400;
+      color: var(--rust);
+      max-width: 600px;
+      line-height: 1.6;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.9s forwards;
+    }
+
+    .hero-meta {
+      margin-top: 3rem;
+      display: flex;
+      gap: 3rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.1s forwards;
+    }
+
+    .hero-meta-item {
+      text-align: center;
+    }
+
+    .hero-meta-item .value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      display: block;
+    }
+
+    .hero-meta-item .label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--stone);
+      font-weight: 500;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      animation: fadeUp 1s ease 1.4s forwards;
+    }
+
+    .hero-scroll span {
+      display: block;
+      width: 1px;
+      height: 50px;
+      background: var(--gold);
+      margin: 0 auto 0.5rem;
+      animation: scrollPulse 2s ease infinite;
+    }
+
+    .hero-scroll small {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* ===== SECTIONS ===== */
+    section {
+      padding: 6rem 2rem;
+    }
+
+    .section-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: 2rem;
+    }
+
+    .section-body p {
+      font-size: 1.02rem;
+      color: #3a3630;
+      margin-bottom: 1.5rem;
+      max-width: 720px;
+    }
+
+    .section-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ===== ABOUT / EXAMINE SECTION ===== */
+    #about {
+      background: var(--parchment);
+    }
+
+    .fact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+
+    .fact-card {
+      background: var(--warm-white);
+      padding: 2rem;
+      border: 1px solid rgba(184, 134, 11, 0.15);
+      position: relative;
+    }
+
+    .fact-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--gold);
+    }
+
+    .fact-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--rust);
+      margin-bottom: 0.8rem;
+    }
+
+    .fact-card p {
+      font-size: 0.92rem;
+      color: var(--stone);
+      line-height: 1.6;
+    }
+
+    /* ===== AUTHOR SECTION ===== */
+    #author {
+      background: var(--warm-white);
+    }
+
+    .author-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+      margin-top: 2rem;
+    }
+
+    .author-portrait {
+      background: var(--parchment);
+      padding: 3rem 2rem;
+      text-align: center;
+      border: 1px solid rgba(184, 134, 11, 0.12);
+      position: relative;
+    }
+
+    .author-portrait::after {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(184, 134, 11, 0.08);
+      pointer-events: none;
+    }
+
+    .author-name-cn {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.3rem;
+    }
+
+    .author-name-en {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--stone);
+      margin-bottom: 1rem;
+    }
+
+    .author-dates {
+      font-size: 0.85rem;
+      color: var(--gold);
+      font-weight: 500;
+      letter-spacing: 0.1em;
+    }
+
+    .author-details p {
+      font-size: 1rem;
+      color: #3a3630;
+      margin-bottom: 1.3rem;
+      line-height: 1.7;
+    }
+
+    /* ===== CONTENTS SECTION ===== */
+    #contents {
+      background: var(--ink);
+      color: var(--parchment);
+    }
+
+    #contents .section-label { color: var(--gold-light); }
+    #contents .section-title { color: var(--parchment); }
+
+    .volume-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.2rem;
+      margin-top: 2.5rem;
+    }
+
+    .volume-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(212, 168, 67, 0.15);
+      padding: 1.5rem;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .volume-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(212, 168, 67, 0.35);
+    }
+
+    .volume-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .volume-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(245, 240, 232, 0.4);
+      margin-bottom: 0.8rem;
+    }
+
+    .volume-desc {
+      font-size: 0.88rem;
+      color: rgba(245, 240, 232, 0.7);
+      line-height: 1.5;
+    }
+
+    /* ===== METHODOLOGY ===== */
+    #method {
+      background: var(--parchment);
+    }
+
+    .method-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+
+    .method-step {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      position: relative;
+    }
+
+    .method-step::after {
+      content: '→';
+      position: absolute;
+      right: -1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      color: var(--gold);
+    }
+
+    .method-step:last-child::after {
+      display: none;
+    }
+
+    .method-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--warm-white);
+      border: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.3rem;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .method-step h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.6rem;
+    }
+
+    .method-step p {
+      font-size: 0.88rem;
+      color: var(--stone);
+      line-height: 1.5;
+    }
+
+    /* ===== TIMELINE ===== */
+    #timeline {
+      background: var(--warm-white);
+    }
+
+    .timeline-container {
+      margin-top: 3rem;
+      position: relative;
+      padding-left: 3rem;
+    }
+
+    .timeline-container::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--gold), var(--gold-light), rgba(184, 134, 11, 0.2));
+    }
+
+    .tl-item {
+      position: relative;
+      padding-bottom: 3rem;
+      opacity: 0;
+      transform: translateX(-15px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .tl-item.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -3rem;
+      top: 0.4rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 2px solid var(--warm-white);
+      transform: translateX(-4px);
+    }
+
+    .tl-item.highlight::before {
+      width: 14px;
+      height: 14px;
+      transform: translateX(-6px);
+      box-shadow: 0 0 0 4px rgba(184, 134, 11, 0.2);
+    }
+
+    .tl-year {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+
+    .tl-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .tl-desc {
+      font-size: 0.9rem;
+      color: var(--stone);
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    /* ===== SIGNIFICANCE ===== */
+    #significance {
+      background: var(--parchment);
+    }
+
+    .sig-comparison {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 2rem;
+      align-items: center;
+      margin-top: 2.5rem;
+      padding: 3rem;
+      background: var(--warm-white);
+      border: 1px solid rgba(184, 134, 11, 0.12);
+    }
+
+    .sig-col {
+      text-align: center;
+    }
+
+    .sig-col h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .sig-col .sig-year {
+      font-size: 0.8rem;
+      color: var(--gold);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+
+    .sig-col p {
+      font-size: 0.9rem;
+      color: var(--stone);
+      line-height: 1.5;
+    }
+
+    .sig-divider {
+      width: 1px;
+      height: 120px;
+      background: var(--gold);
+      position: relative;
+    }
+
+    .sig-divider::after {
+      content: 'vs';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--warm-white);
+      padding: 0.5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--gold);
+      font-size: 0.9rem;
+    }
+
+    /* ===== GALLERY / VIEWER ===== */
+    #gallery {
+      background: var(--ink);
+      color: var(--parchment);
+    }
+
+    #gallery .section-label { color: var(--gold-light); }
+    #gallery .section-title { color: var(--parchment); }
+    #gallery .section-body p { color: rgba(245, 240, 232, 0.7); }
+
+    .gallery-frame {
+      margin-top: 2.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(212, 168, 67, 0.15);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .gallery-frame iframe {
+      width: 100%;
+      height: 550px;
+      border: none;
+      background: #fff;
+    }
+
+    .gallery-caption {
+      margin-top: 1rem;
+      font-size: 0.82rem;
+      color: rgba(245, 240, 232, 0.5);
+      font-style: italic;
+    }
+
+    .gallery-link {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.8rem 2rem;
+      border: 1px solid var(--gold-light);
+      color: var(--gold-light);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .gallery-link:hover {
+      background: var(--gold-light);
+      color: var(--ink);
+    }
+
+    /* ===== LEGACY ===== */
+    #legacy {
+      background: var(--warm-white);
+    }
+
+    .legacy-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .legacy-card {
+      padding: 2rem;
+      border: 1px solid rgba(184, 134, 11, 0.12);
+      background: var(--parchment);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .legacy-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(26, 22, 18, 0.08);
+    }
+
+    .legacy-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.8rem;
+    }
+
+    .legacy-card p {
+      font-size: 0.9rem;
+      color: var(--stone);
+      line-height: 1.6;
+    }
+
+    /* ===== REFERENCES ===== */
+    #references {
+      background: var(--parchment);
+      padding: 4rem 2rem;
+    }
+
+    #references .section-inner {
+      max-width: 700px;
+    }
+
+    .ref-list {
+      margin-top: 1.5rem;
+      font-size: 0.88rem;
+      color: var(--stone);
+      line-height: 1.8;
+    }
+
+    .ref-list li {
+      margin-bottom: 0.8rem;
+      padding-left: 1rem;
+      border-left: 2px solid rgba(184, 134, 11, 0.2);
+    }
+
+    .ref-list a {
+      color: var(--rust);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(139, 69, 19, 0.3);
+      transition: border-color 0.3s;
+    }
+
+    .ref-list a:hover {
+      border-color: var(--rust);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--ink);
+      color: rgba(245, 240, 232, 0.4);
+      padding: 3rem 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      line-height: 1.8;
+    }
+
+    footer a {
+      color: var(--gold-light);
+      text-decoration: none;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      nav .nav-links {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      nav .nav-links a {
+        font-size: 0.7rem;
+      }
+
+      .hero-meta {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .author-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .method-steps {
+        grid-template-columns: 1fr;
+      }
+
+      .method-step::after {
+        content: '↓';
+        right: auto;
+        left: 50%;
+        top: auto;
+        bottom: -1rem;
+        transform: translateX(-50%);
+      }
+
+      .sig-comparison {
+        grid-template-columns: 1fr;
+        padding: 2rem;
+      }
+
+      .sig-divider {
+        width: 120px;
+        height: 1px;
+        margin: 0 auto;
+      }
+
+      .sig-divider::after {
+        white-space: nowrap;
+      }
+
+      .volume-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+    }
+
+    /* ===== UTILITY ===== */
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
+      margin: 2rem 0;
+    }
+
+    .text-highlight {
+      color: var(--rust);
+      font-weight: 400;
+    }
+
+    .pull-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      color: var(--rust);
+      line-height: 1.5;
+      padding: 2rem 0 2rem 2rem;
+      border-left: 3px solid var(--gold);
+      margin: 2rem 0;
+      max-width: 650px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo">考古圖</div>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#author">Author</a></li>
+        <li><a href="#contents">Contents</a></li>
+        <li><a href="#method">Method</a></li>
+        <li><a href="#timeline">Timeline</a></li>
+        <li><a href="#significance">Significance</a></li>
+        <li><a href="#gallery">View the Text</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-label">Northern Song Dynasty · 1092 CE</div>
+    <h1 class="hero-title-cn">考古圖</h1>
+    <h2 class="hero-title-en">Kaogu Tu — Illustrated Catalogue of Examined Antiquity</h2>
+    <p class="hero-subtitle">
+      The world's earliest systematic illustrated catalog of ancient artifacts,
+      and a founding document of archaeological practice.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="value">10</span>
+        <span class="label">Volumes</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="value">210</span>
+        <span class="label">Bronze Vessels</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="value">13</span>
+        <span class="label">Jade Objects</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="value">934</span>
+        <span class="label">Years Old</span>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span></span>
+      <small>Scroll</small>
+    </div>
+  </section>
+
+  <!-- ABOUT / EXAMINE -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="section-label">Part I — Examine</div>
+      <h2 class="section-title">What Is the Kaogu Tu?</h2>
+      <div class="section-body">
+        <p>
+          The <em>Kaogu Tu</em> (考古圖), or <em>"Illustrated Catalogue of Examined Antiquity,"</em> is a ten-volume compendium of ancient Chinese artifacts compiled during the Northern Song dynasty. Completed in 1092 CE, it is recognized as the oldest surviving systematic illustrated catalog of ancient objects — a work that predates European antiquarian cataloging by centuries.
+        </p>
+        <p>
+          The catalog documents 210 bronze vessels and 13 jade objects dating from the Shang dynasty (c. 1600–1046 BCE) through the Han dynasty (206 BCE – 220 CE). Each entry includes a detailed illustration drawn to scale, measurements and dimensions, notes on provenance (whether the item was held in a private collection or by an imperial institution), and transcriptions of any inscriptions found on the object.
+        </p>
+        <p>
+          Far from a simple collector's list, the <em>Kaogu Tu</em> represents a deliberate effort to study the past through material evidence rather than textual tradition alone — an approach that foreshadows modern archaeological method.
+        </p>
+      </div>
+
+      <div class="fact-grid">
+        <div class="fact-card">
+          <h3>Full Title</h3>
+          <p>考古圖 (Kaogu Tu) — "Illustrated Catalogue of Examined Antiquity," with a supplement titled 續考古圖 (Xu Kaogu Tu) in 5 additional volumes.</p>
+        </div>
+        <div class="fact-card">
+          <h3>Date of Completion</h3>
+          <p>1092 CE (7th year of the Yuanyou era, Northern Song dynasty), with a preface bearing this date.</p>
+        </div>
+        <div class="fact-card">
+          <h3>Format & Binding</h3>
+          <p>Traditional Chinese woodblock print. The earliest surviving print dates to the Song period. Later Ming and Qing editions are more widely circulated.</p>
+        </div>
+        <div class="fact-card">
+          <h3>Illustrations</h3>
+          <p>Functional, not decorative. Each drawing records the shape, proportions, and inscriptions of ancient bronze and jade objects as empirical evidence for study.</p>
+        </div>
+        <div class="fact-card">
+          <h3>Supplement</h3>
+          <p>The <em>Xu Kaogu Tu</em> (續考古圖) adds 5 volumes covering jade objects, additional bronzes, bells, and other ritual instruments.</p>
+        </div>
+        <div class="fact-card">
+          <h3>Accompanying Text</h3>
+          <p>The <em>Kaogu Tu Shiwen</em> (考古圖釋文) provides character-by-character explanations of inscriptions and ancient scripts found on the cataloged objects.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTHOR -->
+  <section id="author">
+    <div class="section-inner">
+      <div class="section-label">Part II — Research</div>
+      <h2 class="section-title">The Scholar Behind the Catalog</h2>
+
+      <div class="author-layout">
+        <div class="author-portrait">
+          <div class="author-name-cn">呂大臨</div>
+          <div class="author-name-en">Lü Dalin</div>
+          <div class="author-dates">c. 1044 – 1093 CE</div>
+          <div style="margin-top:1.5rem; font-size:0.85rem; color:var(--stone); line-height:1.6;">
+            Philosopher · Epigrapher · Collector<br>
+            National University Erudite (博士)<br>
+            Northern Song Dynasty
+          </div>
+        </div>
+        <div class="author-details">
+          <p>
+            Lü Dalin was a Northern Song scholar who moved between the worlds of Neo-Confucian philosophy and material antiquarianism. A disciple of the renowned philosopher Zhang Zai and the Cheng brothers (Cheng Hao and Cheng Yi), Lü received rigorous training in classical learning before turning his attention to physical artifacts.
+          </p>
+          <p>
+            He held the position of <em>boshi</em> (博士, erudite) at the imperial National University (太學), and was an avid collector of books and cultural objects. His scholarly life combined philosophical inquiry with a commitment to studying material evidence — an unusual combination for his era.
+          </p>
+          <p>
+            Lü died before completing a promotion to the Imperial Secretariat, but his <em>Kaogu Tu</em> survived as his defining legacy. In the preface, he criticizes both the ancient Daoist philosopher Zhuangzi (for dismissing the study of the past) and his own contemporaries (for their ignorance of ancient objects). This dual critique reveals a scholar driven by the conviction that physical artifacts could illuminate historical truth in ways that texts alone could not.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENTS -->
+  <section id="contents">
+    <div class="section-inner">
+      <div class="section-label">Inside the Book</div>
+      <h2 class="section-title">A Systematic Catalog of Ancient Objects</h2>
+      <p style="color: rgba(245,240,232,0.7); max-width: 700px; margin-bottom: 1rem; font-size: 1rem;">
+        Lü Dalin organized the ten volumes by vessel type — a classification system that reveals a systematic, almost scientific approach to cataloging antiquity. The objects span roughly 1,500 years of Chinese civilization.
+      </p>
+
+      <div class="volume-grid">
+        <div class="volume-card">
+          <div class="volume-num">I</div>
+          <div class="volume-label">Juan 1</div>
+          <div class="volume-desc">18 tripod cauldrons (鼎 dǐng) — ritual vessels used in state ceremonies and ancestral rites.</div>
+        </div>
+        <div class="volume-card">
+          <div class="volume-num">II</div>
+          <div class="volume-label">Juan 2</div>
+          <div class="volume-desc">12 hollow-foot tripods (鬲 lì), 6 tripod-and-pot sets (甗 yǎn), and 1 special tripod (鬵 zǎn).</div>
+        </div>
+        <div class="volume-card">
+          <div class="volume-num">III</div>
+          <div class="volume-label">Juan 3</div>
+          <div class="volume-desc">16 round vessels (敦 duì), 4 tureens (簋 guǐ), pots (缶 fǒu), kettles (鋪 pū), and a tureen cover.</div>
+        </div>
+        <div class="volume-card">
+          <div class="volume-num">IV</div>
+          <div class="volume-label">Juan 4</div>
+          <div class="volume-desc">21 ritual vessels (彝 yí), 8 carry-on pots (卣 yǒu), 3 wine vessels (尊 zūn), 1 jar (罍 léi), and 14 vases (壺 hú).</div>
+        </div>
+        <div class="volume-card">
+          <div class="volume-num">V–X</div>
+          <div class="volume-label">Juan 5–10</div>
+          <div class="volume-desc">Additional bronze types including wine warmers, water vessels, musical instruments, weapons, and miscellaneous implements.</div>
+        </div>
+        <div class="volume-card">
+          <div class="volume-num" style="font-size:1.4rem;">續</div>
+          <div class="volume-label">Supplement (5 Juan)</div>
+          <div class="volume-desc">20 jade objects, 22 additional bronzes, 26 tripods, 20 bells, and 12 miscellaneous bronze artifacts.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHODOLOGY -->
+  <section id="method">
+    <div class="section-inner">
+      <div class="section-label">Cataloging Method</div>
+      <h2 class="section-title">How Lü Dalin Documented Antiquity</h2>
+      <div class="section-body">
+        <p>
+          What makes the <em>Kaogu Tu</em> remarkable is not merely its scope, but its method. Each catalog entry follows a consistent, empirical framework that anticipates the rigor of modern archaeological documentation.
+        </p>
+      </div>
+
+      <div class="method-steps">
+        <div class="method-step">
+          <div class="method-icon">圖</div>
+          <h3>Illustration</h3>
+          <p>A detailed drawing of the object, rendered to show its form, proportions, and decorative patterns as accurately as possible.</p>
+        </div>
+        <div class="method-step">
+          <div class="method-icon">量</div>
+          <h3>Measurement</h3>
+          <p>Precise dimensions including height, width, depth, and weight — a standardized approach to physical documentation.</p>
+        </div>
+        <div class="method-step">
+          <div class="method-icon">銘</div>
+          <h3>Inscription & Provenance</h3>
+          <p>Transcription and analysis of inscriptions, plus records of where the object was held — imperial archives, temples, or private collections.</p>
+        </div>
+      </div>
+
+      <div class="pull-quote" style="margin-top:3rem;">
+        "Lü Dalin tried to avoid all speculation and wrong interpretation. The various objects had been collected by private collectors as well as by government institutions."
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section id="timeline">
+    <div class="section-inner">
+      <div class="section-label">Historical Context</div>
+      <h2 class="section-title">The Song Dynasty Golden Age of Antiquarianism</h2>
+      <div class="section-body">
+        <p>
+          The <em>Kaogu Tu</em> did not emerge in isolation. It was part of a broader Northern Song intellectual movement that turned to ancient objects as sources of historical knowledge — a movement now recognized as the birth of Chinese antiquarianism.
+        </p>
+      </div>
+
+      <div class="timeline-container">
+        <div class="tl-item">
+          <div class="tl-year">1007–1072</div>
+          <div class="tl-title">Ouyang Xiu and the Jigulu (集古錄)</div>
+          <div class="tl-desc">The great statesman and scholar Ouyang Xiu compiles a catalog of some 400 rubbings of ancient inscriptions on bronze and stone — pioneering the field of epigraphy (金石學, jīnshí xué) and establishing the precedent that ancient objects could serve as historical evidence.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year">c. 1044</div>
+          <div class="tl-title">Birth of Lü Dalin</div>
+          <div class="tl-desc">Born into a scholarly family, Lü Dalin becomes a student of the philosopher Zhang Zai and the Cheng brothers, inheriting both Neo-Confucian thought and an empirical mindset.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year">1070s–1080s</div>
+          <div class="tl-title">Growth of Private Collections</div>
+          <div class="tl-desc">Wealthy Song scholars and officials amass collections of ancient bronzes, jades, and stone inscriptions. Government institutions — the Imperial Archives, Palace Treasury, and Office of Sacrifices — also accumulate significant holdings, creating a critical mass of available objects for study.</div>
+        </div>
+
+        <div class="tl-item highlight">
+          <div class="tl-year">1092</div>
+          <div class="tl-title">Completion of the Kaogu Tu</div>
+          <div class="tl-desc">Lü Dalin finishes his systematic catalog of 210 bronzes and 13 jades from the Shang through Han dynasties, drawing from both private and imperial collections. The work sets a new standard for the documentation of ancient objects.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year">c. 1093</div>
+          <div class="tl-title">Death of Lü Dalin</div>
+          <div class="tl-desc">Lü dies shortly after completing his masterwork, before receiving a promotion to the Imperial Secretariat. His catalog survives as his most enduring contribution.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year">1111–1125</div>
+          <div class="tl-title">Emperor Huizong's Bogu Tu (博古圖)</div>
+          <div class="tl-desc">Emperor Huizong commissions a far larger catalog of the imperial collection — the Xuanhe Bogu Tu — containing 30 volumes. It builds directly on the model established by Lü Dalin's Kaogu Tu, confirming the latter's foundational influence.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year">1127</div>
+          <div class="tl-title">Fall of the Northern Song</div>
+          <div class="tl-desc">The Jurchen conquest destroys Kaifeng and scatters Huizong's vast collection. The Kaogu Tu and Bogu Tu become some of the only surviving records of objects that were otherwise lost — elevating their importance as historical documents.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year">14th–19th c.</div>
+          <div class="tl-title">Transmission Through Later Dynasties</div>
+          <div class="tl-desc">The Kaogu Tu is reprinted in the Ming and Qing periods, and incorporated into the Siku Quanshu (四庫全書), the largest collection of texts in Chinese history. It remains a standard reference for bronze studies across centuries.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year">20th c. – Present</div>
+          <div class="tl-title">Modern Recognition</div>
+          <div class="tl-desc">Scholars recognize the Kaogu Tu as a precursor to modern archaeology. Its systematic approach to classification, measurement, and provenance recording anticipates methods formalized in Western archaeology only in the 18th and 19th centuries. Digital editions now make the text globally accessible.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNIFICANCE -->
+  <section id="significance">
+    <div class="section-inner">
+      <div class="section-label">Archaeological Significance</div>
+      <h2 class="section-title">Precursor to Modern Archaeology</h2>
+      <div class="section-body">
+        <p>
+          The <em>Kaogu Tu</em> occupies a unique place in the global history of archaeology. While the word "考古" (kǎogǔ) — which literally means "examining antiquity" — would eventually become the modern Chinese term for "archaeology," the discipline as practiced by Lü Dalin was centuries ahead of comparable Western efforts.
+        </p>
+        <p>
+          In 11th-century Europe, the study of ancient objects was largely confined to the collecting of Roman coins and relics, with little systematic description. Lü Dalin's catalog, by contrast, applied a consistent methodology: each object was illustrated, measured, classified by type, and placed in a chronological framework spanning dynasties. Inscriptions were transcribed and interpreted. Provenance — whether the piece came from a private collection or an imperial institution — was recorded.
+        </p>
+        <p>
+          These are the core practices of modern archaeological documentation. The <em>Kaogu Tu</em> accomplished them nine centuries ago.
+        </p>
+      </div>
+
+      <div class="sig-comparison">
+        <div class="sig-col">
+          <h3>Kaogu Tu</h3>
+          <div class="sig-year">Song China · 1092 CE</div>
+          <p>Systematic illustration, measurement, typological classification, inscription analysis, and provenance records for 223 ancient objects.</p>
+        </div>
+        <div class="sig-divider"></div>
+        <div class="sig-col">
+          <h3>European Antiquarianism</h3>
+          <div class="sig-year">Europe · 16th–18th c.</div>
+          <p>Comparable systematic cataloging of artifacts only emerges during the Renaissance, with formalized archaeological method not established until the 18th–19th centuries.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery">
+    <div class="section-inner">
+      <div class="section-label">View the Text</div>
+      <h2 class="section-title">Explore the Digital Edition</h2>
+      <div class="section-body">
+        <p>
+          The full text and page images of the <em>Kaogu Tu</em> are available through the Chinese Text Project (ctext.org), a digital library of pre-modern Chinese texts. The edition hosted there allows you to browse volume by volume, viewing the original woodblock-printed pages alongside transcribed text.
+        </p>
+      </div>
+
+      <div class="gallery-frame">
+        <iframe
+          src="https://ctext.org/wiki.pl?if=en&res=355702"
+          title="Kaogu Tu on ctext.org"
+          loading="lazy"
+          sandbox="allow-scripts allow-same-origin allow-popups"
+        ></iframe>
+        <div class="gallery-caption">
+          Digital edition hosted by the Chinese Text Project (ctext.org). Content in the public domain.
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:2rem;">
+        <a href="https://ctext.org/wiki.pl?if=en&res=355702" target="_blank" rel="noopener" class="gallery-link">
+          Open Full Text on ctext.org →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEGACY -->
+  <section id="legacy">
+    <div class="section-inner">
+      <div class="section-label">Enduring Legacy</div>
+      <h2 class="section-title">Why the Kaogu Tu Still Matters</h2>
+      <div class="section-body">
+        <p>
+          Nearly a millennium after its creation, the <em>Kaogu Tu</em> remains relevant to multiple fields of study. Its influence extends far beyond its original Song dynasty context.
+        </p>
+      </div>
+
+      <div class="legacy-cards">
+        <div class="legacy-card">
+          <h3>Foundation of Bronze Studies</h3>
+          <p>The typological classification system Lü Dalin developed for ancient bronzes — grouping objects by form (鼎, 鬲, 簋, etc.) — remains the foundation of Chinese bronze vessel studies today. Modern catalogs still use categories he helped establish.</p>
+        </div>
+        <div class="legacy-card">
+          <h3>Record of Lost Objects</h3>
+          <p>Many artifacts documented in the <em>Kaogu Tu</em> were subsequently lost — particularly after the fall of the Northern Song in 1127. The catalog serves as the only surviving record of objects that would otherwise be unknown to history.</p>
+        </div>
+        <div class="legacy-card">
+          <h3>Epigraphic Resource</h3>
+          <p>The inscription transcriptions in the <em>Kaogu Tu Shiwen</em> (釋文) remain valuable for scholars studying ancient Chinese scripts, providing readings of bronze inscriptions that can be cross-referenced with modern archaeological finds.</p>
+        </div>
+        <div class="legacy-card">
+          <h3>Model for Later Catalogs</h3>
+          <p>Emperor Huizong's <em>Bogu Tu</em>, the Qing dynasty's epigraphic tradition, and ultimately modern Chinese archaeology all trace a lineage back to the systematic methods pioneered in Lü Dalin's work.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REFERENCES -->
+  <section id="references">
+    <div class="section-inner">
+      <div class="section-label">References & Resources</div>
+      <h2 class="section-title" style="font-size:1.8rem;">Further Reading</h2>
+      <ul class="ref-list">
+        <li>
+          <strong>Digital Text:</strong> <a href="https://ctext.org/wiki.pl?if=en&res=355702" target="_blank" rel="noopener">考古圖 on the Chinese Text Project (ctext.org)</a>
+        </li>
+        <li>
+          <strong>Chinaknowledge.de:</strong> <a href="http://chinaknowledge.de/Literature/Science/kaogutu.html" target="_blank" rel="noopener">Kaogutu 考古圖</a> — Encyclopedic entry on the work and its editions.
+        </li>
+        <li>
+          <strong>HathiTrust:</strong> <a href="https://catalog.hathitrust.org/Record/100236639" target="_blank" rel="noopener">Kao gu tu : shi juan</a> — Catalog record for digitized historical editions.
+        </li>
+        <li>
+          <strong>Sena, Yun-Chiahn C.</strong> "Cataloguing Antiquity: A Comparative Study of the Kaogu tu and Bogu tu," in Wu Hung (ed.), <em>Reinventing the Past: Archaism and Antiquarianism in Chinese Art and Visual Culture</em>, University of Chicago, 2010: 200–228.
+        </li>
+        <li>
+          <strong>Su Rongyu.</strong> "The Reception of 'Archaeology' and 'Prehistory' and the Founding of Archaeology in Late Imperial China," in Lackner & Vittinghoff (eds.), <em>Mapping Meanings</em>, Brill, 2004: 423–449.
+        </li>
+        <li>
+          <strong>Kwok, Wing-hay (Alexander).</strong> <em>A Study of Lu Dalin's (1046–1092) Kao Gu Tu</em>. Scholarly monograph on the work.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      考古圖 · Kaogu Tu · A Rare Book Project<br>
+      Digital text courtesy of the <a href="https://ctext.org/wiki.pl?if=en&res=355702" target="_blank" rel="noopener">Chinese Text Project</a>.<br>
+      Site content © 2026. Created for educational and scholarly purposes.
+    </p>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Timeline scroll animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    document.querySelectorAll('.tl-item').forEach(item => {
+      observer.observe(item);
+    });
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          const navHeight = document.querySelector('nav').offsetHeight;
+          const targetPos = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+          window.scrollTo({ top: targetPos, behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
