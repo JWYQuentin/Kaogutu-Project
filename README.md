@@ -6,7 +6,7 @@ This project was created as a rare book study for an archaeology course.
 
 ## Live Site
 
-🔗 [View the website]((https://jwyquentin.github.io/Kaogutu-Project/))
+🔗 [View the website](https://jwyquentin.github.io/Kaogutu-Project/)
 
 ## Sections
 
